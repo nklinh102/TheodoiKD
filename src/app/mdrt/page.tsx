@@ -34,26 +34,50 @@ const MdrtPageContent = () => {
 
         try {
             const { toPng } = await import('html-to-image');
-            captureRef.current.setAttribute('data-capturing', 'true');
+            const element = captureRef.current;
+            element.setAttribute('data-capturing', 'true');
 
-            // Enforce desktop width (at least 1200px) for consistent layout
+
+            // Store original styles
+            const originalStyle = element.style.cssText;
+
+            // Get current viewport width and calculate scale
+            const currentWidth = window.innerWidth;
             const targetWidth = 1200;
-            const originalWidth = captureRef.current.scrollWidth;
-            const targetHeight = captureRef.current.scrollHeight;
 
-            const dataUrl = await toPng(captureRef.current, {
+            // Calculate scale if needed
+            const scale = currentWidth < targetWidth ? targetWidth / currentWidth : 1;
+
+            // Force desktop layout by setting fixed width
+            element.style.width = `${targetWidth}px`;
+            element.style.minWidth = `${targetWidth}px`;
+            element.style.maxWidth = `${targetWidth}px`;
+
+            // If on mobile, scale down temporarily to fit viewport
+            if (scale > 1) {
+                element.style.transform = `scale(${1 / scale})`;
+                element.style.transformOrigin = 'top left';
+                // Wait for layout to settle
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            const targetHeight = element.scrollHeight * scale;
+
+            const dataUrl = await toPng(element, {
                 cacheBust: true,
                 backgroundColor: '#0f172a',
                 pixelRatio: 2,
                 width: targetWidth,
                 height: targetHeight,
                 style: {
-                    overflow: 'hidden',
+                    overflow: 'visible',
                     borderRadius: '0',
-                    width: `${targetWidth}px`,
-                    minWidth: `${targetWidth}px`,
+                    transform: 'scale(1)',
                 }
             });
+
+            // Restore original styles
+            element.style.cssText = originalStyle;
 
             captureRef.current.removeAttribute('data-capturing');
 
