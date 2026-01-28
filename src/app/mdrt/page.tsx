@@ -36,6 +36,9 @@ const MdrtPageContent = () => {
             const { toPng } = await import('html-to-image');
             const element = captureRef.current;
 
+            // Set capturing flag to disable mobile optimizations
+            element.setAttribute('data-capturing', 'true');
+
             // Store original styles
             const originalStyle = element.style.cssText;
             const originalParentStyle = element.parentElement?.style.cssText || '';
@@ -70,12 +73,14 @@ const MdrtPageContent = () => {
             if (element.parentElement) {
                 element.parentElement.style.cssText = originalParentStyle;
             }
+            element.removeAttribute('data-capturing');
 
             const link = document.createElement('a');
             link.download = `MDRT_T${displayMonth.replace('/', '_')}_Update_${formattedUpdateDate.replace(/\//g, '-')}.png`;
             link.href = dataUrl;
             link.click();
         } catch (error) {
+            captureRef.current?.removeAttribute('data-capturing');
             console.error('Lỗi tải ảnh:', error);
             alert('Không thể tải ảnh. Vui lòng thử lại.');
         }

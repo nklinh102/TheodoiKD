@@ -69,9 +69,20 @@ export function ManulifeProBonusTable() {
             const element = captureRef.current;
             element.setAttribute('data-capturing', 'true');
 
-            const { toPng } = await import('html-to-image');
+            // Store original styles
+            const originalStyle = element.style.cssText;
+            const originalParentStyle = element.parentElement?.style.cssText || '';
 
+            // Force desktop width
             const targetWidth = 1200;
+            element.style.width = `${targetWidth}px`;
+            element.style.minWidth = `${targetWidth}px`;
+            element.style.maxWidth = `${targetWidth}px`;
+
+            // Wait longer for layout
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            const { toPng } = await import('html-to-image');
             const targetHeight = element.scrollHeight;
 
             const dataUrl = await toPng(element, {
@@ -87,6 +98,11 @@ export function ManulifeProBonusTable() {
                 }
             });
 
+            // Restore original styles
+            element.style.cssText = originalStyle;
+            if (element.parentElement) {
+                element.parentElement.style.cssText = originalParentStyle;
+            }
             // Cleanup attribute
             element.removeAttribute('data-capturing');
 

@@ -180,8 +180,21 @@ export function HandoverTab({
 
         try {
             const node = tableRef.current;
+            node.setAttribute('data-capturing', 'true');
+
+            // Store original styles
+            const originalStyle = node.style.cssText;
+            const originalParentStyle = node.parentElement?.style.cssText || '';
+
             // Enforce desktop width (at least 1200px) for consistent layout
             const targetWidth = 1200;
+            node.style.width = `${targetWidth}px`;
+            node.style.minWidth = `${targetWidth}px`;
+            node.style.maxWidth = `${targetWidth}px`;
+
+            // Wait for layout
+            await new Promise(resolve => setTimeout(resolve, 500));
+
             const targetHeight = node.scrollHeight;
 
             const dataUrl = await toPng(node, {
@@ -198,6 +211,13 @@ export function HandoverTab({
                     minWidth: `${targetWidth}px`,
                 }
             });
+
+            // Restore original styles
+            node.style.cssText = originalStyle;
+            if (node.parentElement) {
+                node.parentElement.style.cssText = originalParentStyle;
+            }
+            node.removeAttribute('data-capturing');
             const link = document.createElement("a");
             link.href = dataUrl;
             link.download = "Danh_sach_ban_giao_HD.png";

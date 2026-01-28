@@ -140,39 +140,39 @@
     }
 }
 
-/* Mobile optimizations for report tables */
+/* Mobile optimizations for report tables - but NOT during capture */
 @media (max-width: 768px) {
 
-    /* MDRT Table - Compact on mobile */
-    .mdrt-table table {
+    /* MDRT Table - Compact on mobile (skip when capturing) */
+    .mdrt-table:not([data-capturing]) table {
         font-size: 0.7rem !important;
     }
 
-    .mdrt-table th,
-    .mdrt-table td {
+    .mdrt-table:not([data-capturing]) th,
+    .mdrt-table:not([data-capturing]) td {
         padding: 0.25rem 0.375rem !important;
     }
 
-    /* Manulife Pro Table - Compact on mobile */
-    .manulife-pro-table table {
+    /* Manulife Pro Table - Compact on mobile (skip when capturing) */
+    .manulife-pro-table:not([data-capturing]) table {
         font-size: 0.7rem !important;
     }
 
-    .manulife-pro-table th,
-    .manulife-pro-table td {
+    .manulife-pro-table:not([data-capturing]) th,
+    .manulife-pro-table:not([data-capturing]) td {
         padding: 0.25rem 0.375rem !important;
     }
 
-    /* Pending/Handover Tables - Compact on mobile */
-    .pending-table table,
-    .handover-table table {
+    /* Pending/Handover Tables - Compact on mobile (skip when capturing) */
+    .pending-table:not([data-capturing]) table,
+    .handover-table:not([data-capturing]) table {
         font-size: 0.7rem !important;
     }
 
-    .pending-table th,
-    .pending-table td,
-    .handover-table th,
-    .handover-table td {
+    .pending-table:not([data-capturing]) th,
+    .pending-table:not([data-capturing]) td,
+    .handover-table:not([data-capturing]) th,
+    .handover-table:not([data-capturing]) td {
         padding: 0.25rem 0.375rem !important;
     }
 }
