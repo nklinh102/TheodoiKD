@@ -34,36 +34,36 @@ const MdrtPageContent = () => {
 
         try {
             const { toPng } = await import('html-to-image');
-            const element = captureRef.current;
-            element.setAttribute('data-capturing', 'true');
+            const originalElement = captureRef.current;
 
+            // Create a temporary container with fixed desktop width
+            const tempContainer = document.createElement('div');
+            tempContainer.style.position = 'fixed';
+            tempContainer.style.left = '-9999px';
+            tempContainer.style.top = '0';
+            tempContainer.style.width = '1200px';
+            tempContainer.style.minWidth = '1200px';
+            tempContainer.style.maxWidth = '1200px';
+            tempContainer.style.zIndex = '-1';
+            tempContainer.style.backgroundColor = '#0f172a';
 
-            // Store original styles
-            const originalStyle = element.style.cssText;
+            // Clone the element
+            const clonedElement = originalElement.cloneNode(true) as HTMLElement;
+            clonedElement.style.width = '1200px';
+            clonedElement.style.minWidth = '1200px';
+            clonedElement.style.maxWidth = '1200px';
 
-            // Get current viewport width and calculate scale
-            const currentWidth = window.innerWidth;
+            // Append to body
+            tempContainer.appendChild(clonedElement);
+            document.body.appendChild(tempContainer);
+
+            // Wait for images and layout to settle
+            await new Promise(resolve => setTimeout(resolve, 300));
+
             const targetWidth = 1200;
+            const targetHeight = tempContainer.scrollHeight;
 
-            // Calculate scale if needed
-            const scale = currentWidth < targetWidth ? targetWidth / currentWidth : 1;
-
-            // Force desktop layout by setting fixed width
-            element.style.width = `${targetWidth}px`;
-            element.style.minWidth = `${targetWidth}px`;
-            element.style.maxWidth = `${targetWidth}px`;
-
-            // If on mobile, scale down temporarily to fit viewport
-            if (scale > 1) {
-                element.style.transform = `scale(${1 / scale})`;
-                element.style.transformOrigin = 'top left';
-                // Wait for layout to settle
-                await new Promise(resolve => setTimeout(resolve, 100));
-            }
-
-            const targetHeight = element.scrollHeight * scale;
-
-            const dataUrl = await toPng(element, {
+            const dataUrl = await toPng(tempContainer, {
                 cacheBust: true,
                 backgroundColor: '#0f172a',
                 pixelRatio: 2,
@@ -72,21 +72,17 @@ const MdrtPageContent = () => {
                 style: {
                     overflow: 'visible',
                     borderRadius: '0',
-                    transform: 'scale(1)',
                 }
             });
 
-            // Restore original styles
-            element.style.cssText = originalStyle;
-
-            captureRef.current.removeAttribute('data-capturing');
+            // Clean up
+            document.body.removeChild(tempContainer);
 
             const link = document.createElement('a');
             link.download = `MDRT_T${displayMonth.replace('/', '_')}_Update_${formattedUpdateDate.replace(/\//g, '-')}.png`;
             link.href = dataUrl;
             link.click();
         } catch (error) {
-            captureRef.current?.removeAttribute('data-capturing');
             console.error('Lỗi tải ảnh:', error);
             alert('Không thể tải ảnh. Vui lòng thử lại.');
         }
