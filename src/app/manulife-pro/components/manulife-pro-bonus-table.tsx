@@ -70,11 +70,21 @@ export function ManulifeProBonusTable() {
             element.setAttribute('data-capturing', 'true');
 
             const { toPng } = await import('html-to-image');
+
+            const targetWidth = 1200;
+            const targetHeight = element.scrollHeight;
+
             const dataUrl = await toPng(element, {
                 cacheBust: true,
                 backgroundColor: '#ffffff',
                 pixelRatio: 2,
-                style: { borderRadius: '0' }
+                width: targetWidth,
+                height: targetHeight,
+                style: {
+                    borderRadius: '0',
+                    width: `${targetWidth}px`,
+                    minWidth: `${targetWidth}px`,
+                }
             });
 
             // Cleanup attribute

@@ -36,15 +36,22 @@ const MdrtPageContent = () => {
             const { toPng } = await import('html-to-image');
             captureRef.current.setAttribute('data-capturing', 'true');
 
+            // Enforce desktop width (at least 1200px) for consistent layout
+            const targetWidth = 1200;
+            const originalWidth = captureRef.current.scrollWidth;
+            const targetHeight = captureRef.current.scrollHeight;
+
             const dataUrl = await toPng(captureRef.current, {
                 cacheBust: true,
                 backgroundColor: '#0f172a',
                 pixelRatio: 2,
-                width: captureRef.current.scrollWidth,
-                height: captureRef.current.scrollHeight,
+                width: targetWidth,
+                height: targetHeight,
                 style: {
                     overflow: 'hidden',
                     borderRadius: '0',
+                    width: `${targetWidth}px`,
+                    minWidth: `${targetWidth}px`,
                 }
             });
 

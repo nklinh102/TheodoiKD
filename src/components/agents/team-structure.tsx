@@ -242,12 +242,20 @@ export function TeamStructure({ agents, agentStats = {}, onUpdate, virtualRootNa
     const handleDownloadTree = async () => {
         if (!treeContainerRef.current) return;
         try {
+            // Enforce a decent width for capture to prevent mobile layout issues
+            const targetWidth = Math.max(1200, treeContainerRef.current.scrollWidth);
+            const targetHeight = treeContainerRef.current.scrollHeight;
+
             const dataUrl = await toPng(treeContainerRef.current, {
                 cacheBust: true,
                 backgroundColor: '#ffffff',
                 pixelRatio: 2,
+                width: targetWidth,
+                height: targetHeight,
                 style: {
                     transform: 'scale(1)',
+                    width: `${targetWidth}px`,
+                    minWidth: `${targetWidth}px`,
                 }
             });
             const link = document.createElement('a');

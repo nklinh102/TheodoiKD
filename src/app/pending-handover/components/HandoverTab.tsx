@@ -180,19 +180,22 @@ export function HandoverTab({
 
         try {
             const node = tableRef.current;
-            const width = node.scrollWidth;
-            const height = node.scrollHeight;
+            // Enforce desktop width (at least 1200px) for consistent layout
+            const targetWidth = 1200;
+            const targetHeight = node.scrollHeight;
 
             const dataUrl = await toPng(node, {
                 cacheBust: true,
                 backgroundColor: '#ffffff',
                 pixelRatio: 2,
-                width: width,
-                height: height,
+                width: targetWidth,
+                height: targetHeight,
                 style: {
                     overflow: 'visible',
                     maxHeight: 'none',
                     maxWidth: 'none',
+                    width: `${targetWidth}px`,
+                    minWidth: `${targetWidth}px`,
                 }
             });
             const link = document.createElement("a");
