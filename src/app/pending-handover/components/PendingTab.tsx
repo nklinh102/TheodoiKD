@@ -197,7 +197,7 @@ export function PendingTab({ data, setData, fileName, setFileName }: PendingTabP
                 )}
             </div>
 
-            <div ref={tableRef} className="rounded-md border bg-white shadow-sm overflow-visible p-6">
+            <div ref={tableRef} className="rounded-md border bg-white shadow-sm overflow-visible p-6 pending-table">
                 <h2 className="text-xl font-bold text-center mb-6 uppercase text-orange-700 tracking-wide">
                     Danh sách hợp đồng chờ cấp
                 </h2>

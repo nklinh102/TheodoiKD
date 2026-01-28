@@ -251,7 +251,7 @@ export function HandoverTab({
                 )}
             </div>
 
-            <div ref={tableRef} className="rounded-md border bg-white shadow-sm overflow-visible p-6">
+            <div ref={tableRef} className="rounded-md border bg-white shadow-sm overflow-visible p-6 handover-table">
                 <div className="text-center mb-6">
                     <h2 className="text-xl font-bold uppercase text-blue-900 tracking-wide">
                         Danh sách Chưa Hoàn Trả Giấy Xác Nhận Bàn Giao Hợp Đồng

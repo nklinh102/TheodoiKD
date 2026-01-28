@@ -211,7 +211,7 @@ export function ManulifeProBonusTable() {
                     </div>
                 </div>
 
-                <div className="overflow-x-auto bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm">
+                <div className="overflow-x-auto bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-sm manulife-pro-table">
                     <Table className="border-separate border-spacing-y-1">
                         <TableHeader>
                             <TableRow className="bg-emerald-600 hover:bg-emerald-600 border-none overflow-hidden">

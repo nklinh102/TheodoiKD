@@ -146,7 +146,7 @@ export function TableOnly() {
     };
 
     return (
-        <div className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 rounded-xl shadow-2xl overflow-hidden border border-blue-700/30">
+        <div className="bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 rounded-xl shadow-2xl overflow-hidden border border-blue-700/30 mdrt-table">
             {loading ? (
                 <div className="text-center py-12 text-blue-200">Đang tải dữ liệu...</div>
             ) : (
