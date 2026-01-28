@@ -51,22 +51,22 @@ export default function Dashboard() {
   return (
     <div className="space-y-8 pb-10">
       {/* Header Control */}
-      <div className="flex flex-col md:flex-row justify-between items-center bg-white p-5 rounded-2xl shadow-sm border border-slate-100 gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-slate-100 gap-4">
         <div>
-          <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-600">Tổng Quan Kinh Doanh</h1>
-          <p className="text-sm font-medium text-slate-500 mt-1">Theo dõi hiệu quả hoạt động kinh doanh của đội ngũ</p>
+          <h1 className="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-600">Tổng Quan Kinh Doanh</h1>
+          <p className="text-xs md:text-sm font-medium text-slate-500 mt-1">Theo dõi hiệu quả hoạt động kinh doanh của đội ngũ</p>
         </div>
 
-        <div className="flex items-center gap-4 bg-white p-1.5 rounded-xl border border-slate-200 shadow-sm">
-          <Button variant="ghost" size="icon" onClick={() => adjustMonth(-1)} className="h-9 w-9 text-slate-600 hover:text-blue-600 hover:bg-blue-50">
-            <ChevronLeft className="h-5 w-5" />
+        <div className="flex items-center self-stretch sm:self-auto gap-4 bg-white p-1.5 rounded-xl border border-slate-200 shadow-sm justify-between sm:justify-start">
+          <Button variant="ghost" size="icon" onClick={() => adjustMonth(-1)} className="h-8 w-8 md:h-9 md:w-9 text-slate-600 hover:text-blue-600 hover:bg-blue-50">
+            <ChevronLeft className="h-4 w-4 md:h-5 md:w-5" />
           </Button>
-          <div className="flex items-center gap-2 font-bold text-sm w-[150px] justify-center text-slate-700">
-            <Calendar className="h-4 w-4 text-indigo-500" />
+          <div className="flex items-center gap-2 font-bold text-xs md:text-sm min-w-[120px] md:w-[150px] justify-center text-slate-700 whitespace-nowrap">
+            <Calendar className="h-4 w-4 text-indigo-500 hidden xs:block" />
             Tháng {month.split('-')[1]} - {month.split('-')[0]}
           </div>
-          <Button variant="ghost" size="icon" onClick={() => adjustMonth(1)} className="h-9 w-9 text-slate-600 hover:text-blue-600 hover:bg-blue-50">
-            <ChevronRight className="h-5 w-5" />
+          <Button variant="ghost" size="icon" onClick={() => adjustMonth(1)} className="h-8 w-8 md:h-9 md:w-9 text-slate-600 hover:text-blue-600 hover:bg-blue-50">
+            <ChevronRight className="h-4 w-4 md:h-5 md:w-5" />
           </Button>
         </div>
       </div>

@@ -88,25 +88,27 @@ export function SopTable({ refreshTrigger }: SopTableProps) {
 
     return (
         <div className="space-y-4">
-            <div className="flex gap-4 items-end">
+            <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-end">
                 <div className="flex-1">
-                    <label className="text-sm font-medium mb-2 block">Tìm kiếm Mã ĐL</label>
+                    <label className="text-sm font-medium mb-1.5 block">Tìm kiếm Mã ĐL</label>
                     <Input
                         placeholder="Nhập mã đại lý..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                        className="h-9"
                     />
                 </div>
                 <div className="flex-1">
-                    <label className="text-sm font-medium mb-2 block">Lọc theo ngày</label>
+                    <label className="text-sm font-medium mb-1.5 block">Lọc theo ngày</label>
                     <Input
                         type="date"
                         value={filterDate}
                         onChange={(e) => setFilterDate(e.target.value)}
+                        className="h-9"
                     />
                 </div>
-                <Button onClick={handleSearch}>Tìm kiếm</Button>
+                <Button onClick={handleSearch} className="h-9">Tìm kiếm</Button>
             </div>
 
             <div className="text-sm text-muted-foreground">

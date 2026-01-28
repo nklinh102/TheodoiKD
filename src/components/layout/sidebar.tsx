@@ -32,25 +32,33 @@ const navigation = [
     { name: "Pending & Bàn giao", href: "/pending-handover", icon: FileClock },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+    onClose?: () => void;
+    className?: string;
+}
+
+export function Sidebar({ onClose, className }: SidebarProps) {
     const pathname = usePathname();
 
     return (
-        <div className="w-64 bg-white border-r flex flex-col">
-            <div className="p-6 flex items-center gap-3">
-                <ShieldCheck className="w-8 h-8 text-blue-600" />
-                <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                    IAM System
-                </span>
+        <div className={cn("w-64 bg-white border-r flex flex-col h-full", className)}>
+            <div className="p-6 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                    <ShieldCheck className="w-8 h-8 text-blue-600" />
+                    <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                        IAM System
+                    </span>
+                </div>
             </div>
 
-            <nav className="flex-1 px-4 space-y-1 mt-4">
+            <nav className="flex-1 px-4 space-y-1 mt-4 overflow-y-auto">
                 {navigation.map((item) => {
                     const isActive = pathname === item.href;
                     return (
                         <Link
                             key={item.name}
                             href={item.href}
+                            onClick={onClose}
                             className={cn(
                                 "flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-md transition-colors",
                                 isActive

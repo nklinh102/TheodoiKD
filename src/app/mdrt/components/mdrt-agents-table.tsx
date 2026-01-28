@@ -2,6 +2,7 @@
 
 import { useEffect, useState, createContext, useContext, ReactNode } from "react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface AgentData {
     agent_code: string;
@@ -46,12 +47,15 @@ export function FilterButtons() {
     const { filter, setFilter } = useMdrtFilter();
 
     return (
-        <div className="flex justify-end gap-2">
+        <div className="flex flex-wrap justify-end gap-2">
             <Button
                 onClick={() => setFilter(null)}
                 size="sm"
                 variant={filter === null ? "default" : "outline"}
-                className={`text-xs ${filter === null ? "bg-blue-600 hover:bg-blue-700" : "border-blue-400 text-blue-300 hover:bg-blue-900/30"}`}
+                className={cn(
+                    "text-xs px-3",
+                    filter === null ? "bg-blue-600 hover:bg-blue-700" : "border-blue-400 text-blue-300 hover:bg-blue-900/30"
+                )}
             >
                 Toàn bộ
             </Button>
@@ -59,7 +63,10 @@ export function FilterButtons() {
                 onClick={() => setFilter("10")}
                 size="sm"
                 variant={filter === "10" ? "default" : "outline"}
-                className={`text-xs ${filter === "10" ? "bg-blue-600 hover:bg-blue-700" : "border-blue-400 text-blue-300 hover:bg-blue-900/30"}`}
+                className={cn(
+                    "text-xs px-3",
+                    filter === "10" ? "bg-blue-600 hover:bg-blue-700" : "border-blue-400 text-blue-300 hover:bg-blue-900/30"
+                )}
             >
                 Top 10
             </Button>
@@ -67,7 +74,10 @@ export function FilterButtons() {
                 onClick={() => setFilter("15")}
                 size="sm"
                 variant={filter === "15" ? "default" : "outline"}
-                className={`text-xs ${filter === "15" ? "bg-blue-600 hover:bg-blue-700" : "border-blue-400 text-blue-300 hover:bg-blue-900/30"}`}
+                className={cn(
+                    "text-xs px-3",
+                    filter === "15" ? "bg-blue-600 hover:bg-blue-700" : "border-blue-400 text-blue-300 hover:bg-blue-900/30"
+                )}
             >
                 Top 15
             </Button>
@@ -75,7 +85,10 @@ export function FilterButtons() {
                 onClick={() => setFilter("20")}
                 size="sm"
                 variant={filter === "20" ? "default" : "outline"}
-                className={`text-xs ${filter === "20" ? "bg-blue-600 hover:bg-blue-700" : "border-blue-400 text-blue-300 hover:bg-blue-900/30"}`}
+                className={cn(
+                    "text-xs px-3",
+                    filter === "20" ? "bg-blue-600 hover:bg-blue-700" : "border-blue-400 text-blue-300 hover:bg-blue-900/30"
+                )}
             >
                 Top 20
             </Button>

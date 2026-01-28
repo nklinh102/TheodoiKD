@@ -134,23 +134,23 @@ export default function ContractsView() {
     };
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-6 md:space-y-8">
             {/* Header Section */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b pb-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-6">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight text-gray-900">Quản lý Hợp đồng</h2>
-                    <p className="text-muted-foreground mt-1">Theo dõi chi tiết hợp đồng nộp và cấp hàng tháng.</p>
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-gray-900">Quản lý Hợp đồng</h2>
+                    <p className="text-muted-foreground mt-1 text-sm md:text-base">Theo dõi chi tiết hợp đồng nộp và cấp hàng tháng.</p>
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
                     <ExportContractsDialog />
                     <ImportContractsDialog onSuccess={fetchContracts} />
                 </div>
             </div>
 
             {/* Controls Section */}
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-gray-50/50 p-4 rounded-xl border">
+            <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 bg-gray-50/50 p-3 md:p-4 rounded-xl border">
                 {/* Month Picker - Simplified */}
-                <div className="flex items-center gap-4 bg-white p-1 rounded-lg border shadow-sm">
+                <div className="flex items-center justify-between lg:justify-start gap-4 bg-white p-1 rounded-lg border shadow-sm">
                     <Button variant="ghost" size="icon" onClick={() => adjustMonth(-1)} className="h-8 w-8 hover:bg-gray-100">
                         <ChevronLeft className="h-4 w-4" />
                     </Button>
@@ -165,11 +165,11 @@ export default function ContractsView() {
 
                 {/* Filter */}
                 <div className="flex items-center gap-2">
-                    <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-lg border shadow-sm">
+                    <div className="flex flex-1 items-center gap-2 bg-white px-3 py-1.5 rounded-lg border shadow-sm">
                         <Filter className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm text-muted-foreground font-medium mr-1">Lọc theo:</span>
+                        <span className="hidden sm:inline text-sm text-muted-foreground font-medium mr-1">Lọc theo:</span>
                         <Select value={filter} onValueChange={setFilter}>
-                            <SelectTrigger className="w-[180px] border-0 shadow-none h-8 p-0 focus:ring-0">
+                            <SelectTrigger className="flex-1 lg:w-[180px] border-0 shadow-none h-8 p-0 focus:ring-0">
                                 <SelectValue placeholder="Chọn bộ lọc" />
                             </SelectTrigger>
                             <SelectContent>
