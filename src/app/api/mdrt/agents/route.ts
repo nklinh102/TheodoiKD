@@ -84,43 +84,56 @@ export async function GET(req: NextRequest) {
 
         if (sopError) throw sopError;
 
+        // 3.5. Fetch active agents to filter the results
+        const { data: activeAgents, error: agentsError } = await supabase
+            .from("agents")
+            .select("agent_code, status")
+            .eq("status", "Active");
+
+        if (agentsError) throw agentsError;
+
+        const activeAgentCodes = new Set(activeAgents?.map(a => a.agent_code) || []);
+
         // 4. Map SOP data to MDRT agent structure and add supplemental FYP
-        const agentData = sopRecords.map((record: any) => {
-            const d = record.data || {};
+        // Filter to only include Active agents
+        const agentData = sopRecords
+            .filter((record: any) => activeAgentCodes.has(record.agent_code))
+            .map((record: any) => {
+                const d = record.data || {};
 
-            // Helper to get value with multiple potential keys
-            const getVal = (...keys: string[]) => {
-                for (const k of keys) {
-                    if (d[k] !== undefined && d[k] !== null && d[k] !== "") return d[k];
-                }
-                return null;
-            };
+                // Helper to get value with multiple potential keys
+                const getVal = (...keys: string[]) => {
+                    for (const k of keys) {
+                        if (d[k] !== undefined && d[k] !== null && d[k] !== "") return d[k];
+                    }
+                    return null;
+                };
 
-            // Parse FYP Issued from SOP column ' MDRT-FYP tới hiện tại '
-            const rawFyp = getVal(' MDRT-FYP tới hiện tại ', 'MDRT-FYP tới hiện tại', 'FYP Issued');
-            const sopFyp = typeof rawFyp === 'number' ? rawFyp : parseFloat(String(rawFyp || "0").replace(/,/g, ''));
+                // Parse FYP Issued from SOP column ' MDRT-FYP tới hiện tại '
+                const rawFyp = getVal(' MDRT-FYP tới hiện tại ', 'MDRT-FYP tới hiện tại', 'FYP Issued');
+                const sopFyp = typeof rawFyp === 'number' ? rawFyp : parseFloat(String(rawFyp || "0").replace(/,/g, ''));
 
-            // Add supplemental FYP
-            const supplementalFyp = supplementalFypMap[record.agent_code] || 0;
-            const totalFypIssued = sopFyp + supplementalFyp;
+                // Add supplemental FYP
+                const supplementalFyp = supplementalFypMap[record.agent_code] || 0;
+                const totalFypIssued = sopFyp + supplementalFyp;
 
-            const fullName = getVal('Tên Đại lý', 'Tên đầy đủ Đại lý', 'Full Name') || record.agent_code;
-            const rank = getVal('Chức danh', 'Rank', 'Cấp bậc') || "N/A";
+                const fullName = getVal('Tên Đại lý', 'Tên đầy đủ Đại lý', 'Full Name') || record.agent_code;
+                const rank = getVal('Chức danh', 'Rank', 'Cấp bậc') || "N/A";
 
-            const progress = currentMonthTarget > 0 ? (totalFypIssued / currentMonthTarget) * 100 : 0;
-            const remaining = Math.max(0, currentMonthTarget - totalFypIssued);
+                const progress = currentMonthTarget > 0 ? (totalFypIssued / currentMonthTarget) * 100 : 0;
+                const remaining = Math.max(0, currentMonthTarget - totalFypIssued);
 
-            return {
-                agent_code: record.agent_code,
-                full_name: fullName,
-                rank: rank,
-                fyp_issued: totalFypIssued,
-                sop_fyp: sopFyp, // Keep for reference if needed
-                supplemental_fyp: supplementalFyp, // Keep for reference if needed
-                progress_percent: Math.round(progress * 100) / 100,
-                remaining_fyp: remaining
-            };
-        });
+                return {
+                    agent_code: record.agent_code,
+                    full_name: fullName,
+                    rank: rank,
+                    fyp_issued: totalFypIssued,
+                    sop_fyp: sopFyp, // Keep for reference if needed
+                    supplemental_fyp: supplementalFyp, // Keep for reference if needed
+                    progress_percent: Math.round(progress * 100) / 100,
+                    remaining_fyp: remaining
+                };
+            });
 
         // 5. Add agents who have supplemental FYP but are NOT in SOP (new agents)
         const sopAgentCodes = new Set(sopRecords.map(r => r.agent_code));
