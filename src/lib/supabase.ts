@@ -7,4 +7,7 @@ if (!supabaseUrl || !supabaseAnonKey || supabaseUrl.includes('your_')) {
     console.error("❌ Thiếu/Sai thông tin kết nối Supabase trong file .env.local!");
 }
 
-export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '');
+export const supabase = createClient(
+    supabaseUrl || 'https://placeholder.supabase.co',
+    supabaseAnonKey || 'placeholder'
+);
