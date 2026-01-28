@@ -34,36 +34,24 @@ const MdrtPageContent = () => {
 
         try {
             const { toPng } = await import('html-to-image');
-            const originalElement = captureRef.current;
+            const element = captureRef.current;
 
-            // Create a temporary container with fixed desktop width
-            const tempContainer = document.createElement('div');
-            tempContainer.style.position = 'fixed';
-            tempContainer.style.left = '-9999px';
-            tempContainer.style.top = '0';
-            tempContainer.style.width = '1200px';
-            tempContainer.style.minWidth = '1200px';
-            tempContainer.style.maxWidth = '1200px';
-            tempContainer.style.zIndex = '-1';
-            tempContainer.style.backgroundColor = '#0f172a';
+            // Store original styles
+            const originalStyle = element.style.cssText;
+            const originalParentStyle = element.parentElement?.style.cssText || '';
 
-            // Clone the element
-            const clonedElement = originalElement.cloneNode(true) as HTMLElement;
-            clonedElement.style.width = '1200px';
-            clonedElement.style.minWidth = '1200px';
-            clonedElement.style.maxWidth = '1200px';
-
-            // Append to body
-            tempContainer.appendChild(clonedElement);
-            document.body.appendChild(tempContainer);
-
-            // Wait for images and layout to settle
-            await new Promise(resolve => setTimeout(resolve, 300));
-
+            // Force desktop width
             const targetWidth = 1200;
-            const targetHeight = tempContainer.scrollHeight;
+            element.style.width = `${targetWidth}px`;
+            element.style.minWidth = `${targetWidth}px`;
+            element.style.maxWidth = `${targetWidth}px`;
 
-            const dataUrl = await toPng(tempContainer, {
+            // Wait longer for layout to settle and React to re-render
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            const targetHeight = element.scrollHeight;
+
+            const dataUrl = await toPng(element, {
                 cacheBust: true,
                 backgroundColor: '#0f172a',
                 pixelRatio: 2,
@@ -72,11 +60,16 @@ const MdrtPageContent = () => {
                 style: {
                     overflow: 'visible',
                     borderRadius: '0',
+                    width: `${targetWidth}px`,
+                    minWidth: `${targetWidth}px`,
                 }
             });
 
-            // Clean up
-            document.body.removeChild(tempContainer);
+            // Restore original styles
+            element.style.cssText = originalStyle;
+            if (element.parentElement) {
+                element.parentElement.style.cssText = originalParentStyle;
+            }
 
             const link = document.createElement('a');
             link.download = `MDRT_T${displayMonth.replace('/', '_')}_Update_${formattedUpdateDate.replace(/\//g, '-')}.png`;
